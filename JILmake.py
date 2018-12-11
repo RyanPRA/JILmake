@@ -1,4 +1,5 @@
 # Import the __future__ module to provide Python 3 syntax and compatability.
+import __future__
 import six
 
 # Import OrderedDict for use with YAML interaction.
