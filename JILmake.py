@@ -11,9 +11,8 @@ import yaml
 
 # Create a global variable with a list that contains the order in which Autosys Job fields should be listed in the JIL file.
 global order_global 
-order_global = ['insert_job','job_type','owner','permission','max_run_alarm','alarm_if_fail',
-                'send_notification','box_name','machine','condition','file_watch','command',
-                'watch_file_min_size','std_err_file','watch_interval']
+order_global = ['insert_job','job_type','machine','condition','owner','box_name','permission','max_run_alarm','alarm_if_fail',
+                'send_notification','std_err_file','watch_file','watch_file_min_size','watch_interval','command']
 
 # Create class AutosysJob
 class AutosysJob(object):
@@ -92,7 +91,7 @@ class AutosysFWJob(AutosysJob):
 
         7.  box_name: String
         8.  machine: String
-        9.  file_watch: String
+        9.  watch_file: String
         10. watch_file_min_size: Integer
         11. watch_interval: Integer
     
@@ -102,7 +101,7 @@ class AutosysFWJob(AutosysJob):
     """
 
     def __init__(self, insert_job=None, job_type=None, owner=None, permission=None, max_run_alarm=None, 
-                 alarm_if_fail=None, send_notification=None, box_name=None, machine=None, file_watch=None,
+                 alarm_if_fail=None, send_notification=None, box_name=None, machine=None, watch_file=None,
                  watch_file_min_size=None, watch_interval=None):
             
         super(AutosysFWJob, self).__init__(insert_job, job_type, owner, permission, max_run_alarm, 
@@ -111,7 +110,7 @@ class AutosysFWJob(AutosysJob):
         self.job_type = 'FW'
         self.box_name = box_name 
         self.machine = machine 
-        self.file_watch = file_watch
+        self.watch_file = watch_file
         self.watch_file_min_size = watch_file_min_size
         self.watch_interval = watch_interval
 
@@ -233,11 +232,11 @@ class AutosysProcess(object):
             #Order parameters that are defined in global_order 
             for key in order_global:
                 for var, value in vars(obj).items():
-                    if key == var:
+                    if key == var and value != None:
                         instance += str(str(var) + ": " + str(value) + "\n")
             #Add any remaining parameters that are not defined in global_order to the end 
             for var, value in vars(obj).items():
-                if var not in instance:
+                if var not in instance and value != None:
                     instance += str(str(var) + ": " + str(value) + "\n")
             output += str(instance + "\n")
         
@@ -276,9 +275,9 @@ assert(test_job2.job_type == "BOX")
 test_job3 = AutosysFWJob(insert_job="test_job3", owner="user", permission="yes", max_run_alarm=15, alarm_if_fail="y", send_notification="y", box_name="my_box",
                          machine = "my_computer", watch_file_min_size=7, watch_interval=3)
 print(test_job3.insert_job, test_job3.job_type, test_job3.owner, test_job3.permission, test_job3.max_run_alarm, test_job3.alarm_if_fail, 
-      test_job3.box_name, test_job3.machine, test_job3.file_watch, test_job3.watch_file_min_size, test_job3.watch_interval)
+      test_job3.box_name, test_job3.machine, test_job3.watch_file, test_job3.watch_file_min_size, test_job3.watch_interval)
 assert(test_job3.job_type == "FW")
-assert(test_job3.file_watch == None)
+assert(test_job3.watch_file == None)
 
 # test_job4 is an AutosysCMDJob
 test_job4 = AutosysCmdJob(insert_job="test_job4", owner="user", permission="yes", max_run_alarm=15, alarm_if_fail="y", send_notification="y", box_name="my_box",
