@@ -1,8 +1,8 @@
-# Import the __future__ module to provide Python 3 syntax and compatability.
+# Import the __future__ and six modules to provide Python 3 syntax and compatability.
 import __future__
 import six
 
-# Import OrderedDict for use with YAML interaction.
+# Import OrderedDict and yaml modules for use with YAML interaction.
 from collections import OrderedDict
 import yaml
 
